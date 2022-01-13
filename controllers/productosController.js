@@ -3,6 +3,7 @@ const Sequelize = require('sequelize');
 const { log } = require('debug');
 const op = db.Sequelize.Op;
 
+
 module.exports = {
     detalle: function (req,res) {
         let id = req.params.id;
@@ -30,6 +31,24 @@ module.exports = {
     },
 
     buscar: function (req,res) {
+        db.Producto.findAll(
+            {
+                where:
+                {
+                    nombre: {
+                        [op.like]: `%${req.query.busqueda}%`
+
+
+                    }
+                }
+            }
+        ).then(resultados => {
+            res.render('resultadoBusqueda', {
+                resultados
+            })
+        })
+            .catch(err => console.log(err))
+
        
       
     },
@@ -62,8 +81,23 @@ module.exports = {
     productoSubmit: function (req,res) {
         if (req.session.usuarioLogueado == undefined) {
             res.redirect("/");
+        
         }
-       
+        let {nombre, precio, categoria, marca, imagen} =req.body 
+        db.Producto.create({
+            nombre ,
+             precio , 
+             categoria_id: categoria,
+             marca ,
+            img_url: imagen
+        })
+        .then(()=>{
+            res.redirect("/productos/misProductos")
+        })
+        .catch(err => console.log(err))
+
+
+    
 
     },
 

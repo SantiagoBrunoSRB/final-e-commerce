@@ -10,6 +10,7 @@ router.get('/logout', usuarioController.logout);
 router.post('/loginCheck', usuarioController.login);
 
 router.get('/registro', usuarioController.registro);
+router.post('/registroCheck', usuarioController.registroCheck);
 
 
 
